@@ -1,0 +1,248 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Q5</title><meta name="generator" content="MATLAB 9.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-10-21"><meta name="DC.source" content="Q5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">clear;
+close <span class="string">all</span>;
+rng(1);
+
+<span class="comment">%a%</span>
+
+img19200=zeros(19200,16); <span class="comment">%matrix storing image as 19200x1</span>
+ivag=zeros(19200,1);
+mu=zeros(19200,1);
+<span class="keyword">for</span> i=1:16 <span class="comment">% convert images into matrix</span>
+    temp=imread(strcat(<span class="string">'../data/data_fruit/image_'</span>,int2str(i),<span class="string">'.png'</span>));
+    temp1=reshape(temp,19200,1); <span class="comment">%3d array of image convert vector</span>
+    ivag=double(temp1);
+    img19200(:,i)=ivag;
+    mu=mu+ivag;
+<span class="keyword">end</span>
+
+mu=mu/16;
+
+m1=bsxfun(@minus,img19200,mu);
+C=m1*m1.'; <span class="comment">%the covariance matrix=U*Utranspose</span>
+
+[V,D]=eigs(C,10); <span class="comment">% find the 4 reqd eigen vectors</span>
+vig2=V(:,2);
+
+vig4=V(:,4);
+vig3=V(:,3);
+vig1=V(:,1);
+
+img1=image(rescale(reshape(mu,80,80,3)));
+img2=image(rescale(reshape(vig1,80,80,3)));
+img3=image(rescale(reshape(vig2,80,80,3)));
+img4=image(rescale(reshape(vig3,80,80,3)));
+img5=image(rescale(reshape(vig4,80,80,3)));
+<span class="comment">%plot the 5 figures together on a single figure</span>
+subplot(2,3,1), image(rescale(reshape(mu,80,80,3)));
+subplot(2,3,2), image(rescale(reshape(vig1,80,80,3)));
+subplot(2,3,3), image(rescale(reshape(vig2,80,80,3)));
+subplot(2,3,4), image(rescale(reshape(vig3,80,80,3)));
+subplot(2,3,5), image(rescale(reshape(vig4,80,80,3)));
+
+lamdas10= zeros(10,1);
+<span class="keyword">for</span> i=1:10
+    lamdas10(i)=D(i,i);
+<span class="keyword">end</span>
+figure(2);
+plot(lamdas10); <span class="comment">%plot 10 eigen values</span>
+
+<span class="comment">% b%</span>
+closest_rm=zeros(19200,16); <span class="comment">%a matrix = closest repr of each img</span>
+<span class="keyword">for</span> i=1:16
+    x1=dot(img19200(:,i),vig1);
+    x2=dot(img19200(:,i),vig2);
+    m1=dot(mu,vig1);
+    m2=dot(mu,vig2);
+    m3=dot(mu,vig3);
+    x3=dot(img19200(:,i),vig3);
+    x4=dot(img19200(:,i),vig4);
+    m4=dot(mu,vig4);
+    k=(dot(img19200(:,i),mu)-x1*m1-x2*m2-x3*m3-x4*m4)/(dot(mu,mu)-m1*m1-m2*m2-m3*m3-m4*m4);<span class="comment">%the coefficient of mean vector</span>
+    col_clos_rm=k*mu+(x1-m1*k)*vig1+(x2-m2*k)*vig2+(x3-m3*k)*vig3+(x4-m4*k)*vig4; <span class="comment">%colm vector showing closest representation of the image</span>
+    closest_rm(:,i)=col_clos_rm;
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> i=1:16
+    figure(i+2); <span class="comment">%plot the pair of closest repr</span>
+    img2=rescale(reshape(closest_rm(:,i),80,80,3));
+    img1=rescale(reshape(img19200(:,i),80,80,3));
+
+    subplot(1,2,1),image(img1);
+    subplot(1,2,2),image(img2); <span class="comment">%plot the closest rep</span>
+<span class="keyword">end</span>
+
+<span class="comment">%c%</span>
+    figure(19);
+    D1=D(1:4,1:4);
+    U=V(:,1:4);
+    S=D1^0.5;
+    A= U*S*U.';
+    <span class="comment">%A=C^0.5</span>
+
+<span class="keyword">for</span> i=1:3
+    w=randn(19200,1);
+
+    X=mu+A*w;
+    img=rescale(reshape(X,80,80,3));
+    subplot(3,3,i),image(img); <span class="comment">%develop image</span>
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="Q5_01.png" alt=""> <img vspace="5" hspace="5" src="Q5_02.png" alt=""> <img vspace="5" hspace="5" src="Q5_03.png" alt=""> <img vspace="5" hspace="5" src="Q5_04.png" alt=""> <img vspace="5" hspace="5" src="Q5_05.png" alt=""> <img vspace="5" hspace="5" src="Q5_06.png" alt=""> <img vspace="5" hspace="5" src="Q5_07.png" alt=""> <img vspace="5" hspace="5" src="Q5_08.png" alt=""> <img vspace="5" hspace="5" src="Q5_09.png" alt=""> <img vspace="5" hspace="5" src="Q5_10.png" alt=""> <img vspace="5" hspace="5" src="Q5_11.png" alt=""> <img vspace="5" hspace="5" src="Q5_12.png" alt=""> <img vspace="5" hspace="5" src="Q5_13.png" alt=""> <img vspace="5" hspace="5" src="Q5_14.png" alt=""> <img vspace="5" hspace="5" src="Q5_15.png" alt=""> <img vspace="5" hspace="5" src="Q5_16.png" alt=""> <img vspace="5" hspace="5" src="Q5_17.png" alt=""> <img vspace="5" hspace="5" src="Q5_18.png" alt=""> <img vspace="5" hspace="5" src="Q5_19.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clear;
+close all;
+rng(1);
+
+%a%
+
+img19200=zeros(19200,16); %matrix storing image as 19200x1
+ivag=zeros(19200,1);
+mu=zeros(19200,1);
+for i=1:16 % convert images into matrix 
+    temp=imread(strcat('../data/data_fruit/image_',int2str(i),'.png'));
+    temp1=reshape(temp,19200,1); %3d array of image convert vector
+    ivag=double(temp1);
+    img19200(:,i)=ivag;
+    mu=mu+ivag;
+end
+
+mu=mu/16;
+
+m1=bsxfun(@minus,img19200,mu);
+C=m1*m1.'; %the covariance matrix=U*Utranspose
+
+[V,D]=eigs(C,10); % find the 4 reqd eigen vectors
+vig2=V(:,2);
+
+vig4=V(:,4);
+vig3=V(:,3);
+vig1=V(:,1); 
+
+img1=image(rescale(reshape(mu,80,80,3)));
+img2=image(rescale(reshape(vig1,80,80,3)));
+img3=image(rescale(reshape(vig2,80,80,3)));
+img4=image(rescale(reshape(vig3,80,80,3)));
+img5=image(rescale(reshape(vig4,80,80,3)));
+%plot the 5 figures together on a single figure
+subplot(2,3,1), image(rescale(reshape(mu,80,80,3)));
+subplot(2,3,2), image(rescale(reshape(vig1,80,80,3)));
+subplot(2,3,3), image(rescale(reshape(vig2,80,80,3)));
+subplot(2,3,4), image(rescale(reshape(vig3,80,80,3)));
+subplot(2,3,5), image(rescale(reshape(vig4,80,80,3)));
+
+lamdas10= zeros(10,1);
+for i=1:10
+    lamdas10(i)=D(i,i);
+end
+figure(2);
+plot(lamdas10); %plot 10 eigen values 
+
+% b%
+closest_rm=zeros(19200,16); %a matrix = closest repr of each img 
+for i=1:16
+    x1=dot(img19200(:,i),vig1);
+    x2=dot(img19200(:,i),vig2);
+    m1=dot(mu,vig1);
+    m2=dot(mu,vig2);
+    m3=dot(mu,vig3);
+    x3=dot(img19200(:,i),vig3);
+    x4=dot(img19200(:,i),vig4);
+    m4=dot(mu,vig4);
+    k=(dot(img19200(:,i),mu)-x1*m1-x2*m2-x3*m3-x4*m4)/(dot(mu,mu)-m1*m1-m2*m2-m3*m3-m4*m4);%the coefficient of mean vector
+    col_clos_rm=k*mu+(x1-m1*k)*vig1+(x2-m2*k)*vig2+(x3-m3*k)*vig3+(x4-m4*k)*vig4; %colm vector showing closest representation of the image
+    closest_rm(:,i)=col_clos_rm;
+end
+ 
+for i=1:16
+    figure(i+2); %plot the pair of closest repr
+    img2=rescale(reshape(closest_rm(:,i),80,80,3));
+    img1=rescale(reshape(img19200(:,i),80,80,3));
+    
+    subplot(1,2,1),image(img1);
+    subplot(1,2,2),image(img2); %plot the closest rep
+end
+
+%c%
+    figure(19);
+    D1=D(1:4,1:4);
+    U=V(:,1:4);
+    S=D1^0.5;
+    A= U*S*U.';
+    %A=C^0.5
+    
+for i=1:3
+    w=randn(19200,1);
+     
+    X=mu+A*w; 
+    img=rescale(reshape(X,80,80,3)); 
+    subplot(3,3,i),image(img); %develop image
+end
+##### SOURCE END #####
+--></body></html>
