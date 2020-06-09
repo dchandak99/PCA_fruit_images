@@ -20,10 +20,10 @@ Each datum is an image of size 80 × 80 pixels with 3 color channels red (R), gr
 (B), i.e., a 80 × 80 × 3 array. For PCA, each image should be resized to a vector of length 19200 .
 
 For visualization, reshape each vector back to a RGB image of size 80 × 80 pixels using the
-function reshape(), followed by a shift and rescaling of the values into the range [0, 1] , followed by
+function reshape(), followed by a shift and rescaling of the values into the range [0, 1], followed by
 displaying the matrix using the function image().
 
-• Find the mean μ , the covariance matrix C , and the the first 4 eigenvectors of C. 
+• Find the mean μ, the covariance matrix C, and the the first 4 eigenvectors of C. 
 Display the mean and the eigenvectors as images (side by side, in the same figure);  
 Find the first 10 eigenvalues, sort them, and plot their values on a graph. 
 
