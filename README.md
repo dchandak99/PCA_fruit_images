@@ -14,7 +14,7 @@ Instructions to run code and theory is in report, and all the graphs are in resu
 
 **Principal Component Analysis (PCA) for Fruit Images:**
 
-Consider the dataset provided within the folder [data_fruit](data_fruit)
+Consider the dataset provided within the folder [data_fruit](data_fruit):
 
 Each datum is an image of size 80 × 80 pixels with 3 color channels red (R), green (G), and blue
 (B), i.e., a 80 × 80 × 3 array. For PCA, each image should be resized to a vector of length 19200 .
